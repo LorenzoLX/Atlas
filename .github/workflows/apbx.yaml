@@ -20,13 +20,15 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-
+    permissions:
+      contents: write
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || github.ref }}
-          token: ${{ secrets.RUNNER_SECRET }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate YAML files
         run: 'yamllint -d "{extends: relaxed, rules: {empty-lines: disable, line-length: disable, new-line-at-end-of-file: disable, trailing-spaces: disable, new-lines: {type: platform}}}" .'
